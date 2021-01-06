@@ -1,0 +1,91 @@
+import { IconDefinition, IconLookup, library, IconPrefix, IconName } from '@fortawesome/fontawesome-svg-core'
+import {faGithub, faLinkedin, faGoogle, faFacebook} from "@fortawesome/free-brands-svg-icons";
+import {
+    faAtom, 
+    faCogs, 
+    faCopy, 
+    faDatabase, 
+    faEdit, 
+    faSpinner, 
+    faStar as faStarSolid, 
+    faTools, 
+    faTrash, 
+    faUpload, 
+    faBan, 
+    faSave, 
+    faUsers, 
+    faPlus, 
+    faPlusCircle,
+    faArrowUp,
+    faArrowDown,
+    faLink,
+    faSignInAlt,
+    faUserPlus,
+    faHamburger,
+} from "@fortawesome/free-solid-svg-icons";
+
+function initializeLibrary() {
+    library.add(
+        faEdit,
+        faAtom,
+        faCogs,
+        faTools,
+        faDatabase,
+        faSpinner,
+        faCopy,
+        faLinkedin,
+        faGithub,
+        faUpload,
+        faStarSolid,
+        faTrash,
+        faBan,
+        faSave,
+        faUsers,
+        faPlus,
+        faPlusCircle,
+        faArrowUp,
+        faArrowDown,
+        faLink,
+        faGoogle,
+        faFacebook,
+        faSignInAlt,
+        faUserPlus,
+        faHamburger,
+    )
+}
+
+function getIcons(): IconLookup[] {
+    // @ts-ignore
+    const raw = library.definitions;
+
+    const icons: IconLookup[] = [];
+
+    for (let prefix in raw) {
+        for (let iconName in raw[prefix]) {
+            icons.push({
+                prefix: prefix as IconPrefix,
+                iconName: iconName as IconName,
+            })
+        }
+    }
+
+    return icons;
+}
+
+function getStandardIcons(): IconLookup[] {
+    return getIcons().filter(icon => icon.prefix === 'fas');
+}
+
+export default class Icons {
+    public static Initialize() {
+        initializeLibrary();
+    }
+
+    public static GetIcons() {
+        return getIcons();
+    }
+
+    public static GetStandardIcons() {
+        return getStandardIcons();
+    }
+}
