@@ -1,13 +1,14 @@
 <template>
   <div id="app">
     <navbar v-if='showNavbar' />
-    <router-view/>
+    <router-view v-if='initialized' />
   </div>
 </template>
 
 <script lang="ts">
 import {Vue, Component, Watch} from 'vue-property-decorator';
 import Navbar from '@/components/Navbar.vue';
+import { AuthService } from './services/auth.service';
 
 @Component({
   components: {
@@ -16,12 +17,23 @@ import Navbar from '@/components/Navbar.vue';
 })
 export default class App extends Vue {
   private showNavbar = false;
+  private auth!: AuthService;
 
-  private created() {
+  private initialized = false;
+
+  private async created() {
+
+    this.auth = new AuthService();
+    await this.auth.initialize();
+    this.$store.dispatch('fetchUser');
+
     this.checkIfNavbarHidden();
     this.$router.afterEach(() => {
+      console.log(this.$route);
       this.checkIfNavbarHidden();
     })
+
+    this.initialized = true;
   }
 
   private checkIfNavbarHidden() {

@@ -85,8 +85,9 @@
 </template>
 
 <script lang="ts">
+import { FormDefinition, FormFieldType } from '@/dtos/form.dto';
 import {Vue, Component} from 'vue-property-decorator'
-import {AuthService} from './../services/auth.service';
+import {AuthService, TokenSet} from './../services/auth.service';
 
 @Component
 export default class Login extends Vue {
@@ -114,7 +115,10 @@ export default class Login extends Vue {
         }
     }
 
-    private postLogin() {
+    private postLogin(payload: TokenSet) {
+        this.auth.setBearerToken(payload.accessToken);
+        this.auth.saveRefreshToken(payload.refreshToken);
+        this.$store.dispatch('fetchUser');
         if (this.redirectTo) {
             window.location.href = this.redirectTo;
         } else {
@@ -128,7 +132,7 @@ export default class Login extends Vue {
         const res = await this.auth.loginStandard(this.data);
         this.loading.standard = false;
         if (res.success) {
-            this.postLogin();
+            this.postLogin(res.result);
         } else {
             this.error = true;
         }
@@ -160,7 +164,7 @@ export default class Login extends Vue {
                 const idToken = user.getAuthResponse().id_token;
                 const res = await this.auth.loginGoogle(idToken);
                 if (res.success) {
-                    this.postLogin();
+                    this.postLogin(res.result);
                 }
             }, (error) => {
                 console.log(error);

@@ -36,7 +36,7 @@
 
                             <div class='field' v-if='error'>
                                 <div class='control has-text-centered has-text-danger'>
-                                    Invalid email / password
+                                    <span v-if='isGenericError()'>{{error}}</span>
                                 </div>
                             </div>
 
@@ -92,7 +92,7 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator'
-import {AuthService} from './../services/auth.service';
+import {AuthService, LoginDto, RegisterDto} from './../services/auth.service';
 
 @Component
 export default class Register extends Vue {
@@ -102,6 +102,8 @@ export default class Register extends Vue {
 
     private googleAuth!: gapi.auth2.GoogleAuth;
 
+    private registered = false;
+
     private loading = {
         standard: false,
         google: false,
@@ -110,10 +112,11 @@ export default class Register extends Vue {
 
     private redirectTo!: string;
 
-    private data = {
+    private data: RegisterDto = {
         name: '',
         email: '',
         password: '',
+        organizationId: void 0,
     }
 
     private reset() {
@@ -121,6 +124,11 @@ export default class Register extends Vue {
             name: '',
             email: '',
             password: '',
+            organizationId: void 0,
+        }
+
+        if (this.$route.params.orgId) {
+            this.data.organizationId = this.$route.params.orgId;
         }
     }
 
@@ -142,7 +150,7 @@ export default class Register extends Vue {
             this.postLogin();
         } else {
             console.log(res.error);
-            this.error = true;
+            this.error = res.error;
         }
     }
 
@@ -160,13 +168,11 @@ export default class Register extends Vue {
                 client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID,
                 //cookie_policy: 'single_host_origin',
             })
-            
-            console.log(this.$refs.googleButton);
 
             // @ts-ignore
             this.googleAuth.attachClickHandler(this.$refs.googleButton, {}, async (user) => {
                 const idToken = user.getAuthResponse().id_token;
-                const res = await this.auth.registerGoogle(idToken);
+                const res = await this.auth.registerGoogle(idToken, this.$route.params.orgId);
                 console.log(res);
             }, (error) => {
                 console.log(error);
@@ -175,6 +181,10 @@ export default class Register extends Vue {
         if (this.$route.query.redirectTo) {
             this.redirectTo = this.$route.query.redirectTo as string;
         }
+    }
+
+    private isGenericError() {
+        return typeof this.error === 'string';
     }
 }
 </script>
@@ -200,7 +210,7 @@ export default class Register extends Vue {
     }
 
     .google-button:hover {
-        background-color: darken($google-brand, 5%);
+        background-color: darken($google-brand, 2%);
         color: white;
     }
 
@@ -215,7 +225,7 @@ export default class Register extends Vue {
     }
 
     .facebook-button:hover {
-        background-coloR: darken($facebook-brand, 5%);
+        background-coloR: darken($facebook-brand, 2%);
         color: white;
     }
 

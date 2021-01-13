@@ -22,6 +22,13 @@ import {
     faSignInAlt,
     faUserPlus,
     faHamburger,
+    faTachometerAlt,
+    faEllipsisH,
+    faLock,
+    faLockOpen,
+    faPencilAlt,
+    faArrowLeft,
+    faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 function initializeLibrary() {
@@ -45,12 +52,20 @@ function initializeLibrary() {
         faPlusCircle,
         faArrowUp,
         faArrowDown,
+        faArrowLeft,
+        faArrowRight,
         faLink,
         faGoogle,
         faFacebook,
         faSignInAlt,
         faUserPlus,
         faHamburger,
+        faTachometerAlt,
+        faEllipsisH,
+        faLock,
+        faLockOpen,
+        faPencilAlt,
+        faCopy,
     )
 }
 

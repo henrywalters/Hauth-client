@@ -13,9 +13,15 @@
 
         <div class='navbar-menu' :class="{'is-active': toggled}" id='navbar'>
             <div class='navbar-start'>
-                <router-link class='navbar-item' :to="{name: 'Login'}">Sign in</router-link>
-                <router-link class='navbar-item' :to="{name: 'Home'}">Home</router-link>
-
+                <span class='navbar-item' v-if='user'>
+                    Hello {{user.name.split(' ')[0]}}
+                </span>
+                <router-link class='navbar-item' :to="{name: 'Login'}" v-if='!isAuthenticated'>
+                    Sign in
+                </router-link>
+                <a href='#' class='navbar-item' v-else @click.prevent='signout'>
+                    Sign out
+                </a>
                 <a class='navbar-item' href='http://localhost:3000/v1/docs'>Docs</a>
             </div>
 
@@ -30,6 +36,20 @@
                                 View on Github
                             </span>
                         </a>
+
+                        <router-link 
+                            :to="{name: 'Dashboard'}" 
+                            class='button is-inverted is-outlined' 
+                            :class="{'is-dark': !toggled}" 
+                            v-if='isAuthenticated && $route.matched.filter(r => r.name === "Dashboard").length === 0'
+                        >
+                            <span class='icon'>
+                                <icon icon="tachometer-alt" />
+                            </span>
+                            <span>
+                                Go to Dashboard
+                            </span>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -38,11 +58,27 @@
 </template>
 
 <script lang="ts">
+import { User } from '@/dtos/user.dto';
+import { AuthService } from '@/services/auth.service';
 import {Vue, Component} from 'vue-property-decorator'
 
 @Component
 export default class Navbar extends Vue {
     private toggled = false;
+
+    private get isAuthenticated() {
+        return !!this.$store.state.user;
+    }
+
+    private get user(): User {
+        return this.$store.state.user;
+    }
+
+    private async signout() {
+        (new AuthService()).clearRefreshToken();
+        this.$store.commit('setUser', null);
+        this.$router.replace({name: 'Home'});
+    }
 }
 </script>
 

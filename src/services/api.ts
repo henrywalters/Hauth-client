@@ -13,6 +13,6 @@ export class Api {
     }
 
     public setBearerToken(token: string) {
-        this.http.defaults.headers.common["Authorization"] = "Bearer " + token;
+        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
     }
 }
