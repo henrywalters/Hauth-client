@@ -1,17 +1,21 @@
 import { Api } from "./api";
+import { PathParameterMap } from "./pathParameters";
 export type HashMap<V> = { [key: string]: V};
 
 export type Success<S> = { success: true, result: S };
 export type Error<E> = { success: false, error: E };
 export type ApiResponse<S, E> = Success<S> | Error<E>;
 
-// Service that excepts dto T and returns reply R with possible error E.
+/**
+ * Service that excepts dto T and returns reply R with possible error E.
+ * Optionally accepts a parameter type P for url construction.
+ */
 export default class BaseService<T, R, E> extends Api {
 
-    protected name: string;
+    public name: string;
 
-    constructor(name: string, controllerPath: string = "") {
-        super(controllerPath);
+    constructor(name: string, controllerPath: string = "", pathParams: PathParameterMap = {}) {
+        super(controllerPath, pathParams);
         this.name = name;
     }
 

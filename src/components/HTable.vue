@@ -8,7 +8,7 @@
         </thead>
         <tbody>
             <tr v-for="(row, i) in data" :key="i">
-                <h-table-cell v-for="(col, j) in definition.columns" :key="j" :definition="col" :value="row[col.key]" />
+                <h-table-cell v-for="(col, j) in definition.columns" :key="j" :definition="col" :row='row' />
                 <td v-if='canDelete || canEdit'>
                     <div class='buttons'>
                         <button class='button is-primary' :disabled='disabledFn && disabledFn(row)' v-if="canEdit" @click="$emit('edit', row)">

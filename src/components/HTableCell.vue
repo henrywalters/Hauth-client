@@ -1,10 +1,10 @@
 <template>
     <td>
         <span v-if="definition.type === 'icon'">
-            <span class='icon'><icon :icon='icon()' /></span>
+            <span class='icon'><icon :icon='eval(definition.value)' /></span>
         </span>
         <span v-else-if="definition.type === 'date'">
-            {{val() | luxon}}
+            {{eval(definition.value) | luxon}}
         </span>
         <span v-else-if="definition.type === 'control'">
             <div class='buttons'>
@@ -24,24 +24,31 @@
                 </button>
             </div>
         </span>
+        <span v-else-if="definition.type === 'router-link'">
+            <router-link :to="eval(definition.to)">{{eval(definition.linkLabel)}}</router-link>
+        </span>
+        <span v-else-if="definition.type === 'link'">
+            <a :href="eval(definition.to)">{{eval(definition.linkLabel)}}</a>
+        </span>
         <span v-else-if="definition.type === 'collapsible'">
             <a href='#' @click='toggle'>-- <span v-if='expanded'>Hide</span><span v-else>Show</span> {{definition.label}} --</a>
             <ul v-if='expanded'>
-                <li v-for='(item, i) in val()' :key='i'>
+                <li v-for='(item, i) in eval(definition.value)' :key='i'>
                     {{item}}
                 </li>
             </ul>
         </span>
         <span v-else>
-            {{ val()}}
+            {{ eval(definition.value) }}
         </span>
     </td>
 </template>
 
 <script lang="ts">
 import {Vue, Component, Prop, Watch} from "vue-property-decorator";
-import {ColumnDefinition, getValue, getIcon} from "@/dtos/table.dto";
+import {ColumnDefinition, RowValue, evaluate} from "@/dtos/table.dto";
 import { Button, isDisabled } from "@/dtos/button.dto";
+import { HashMap } from "@/services/base.service";
 
 @Component({})
 export default class HTableCell extends Vue {
@@ -49,9 +56,7 @@ export default class HTableCell extends Vue {
     public definition!: ColumnDefinition;
 
     @Prop()
-    public value!: any;
-
-    private internalValue!: any;
+    public row!: HashMap<any>;
 
     private expanded = false;
 
@@ -59,26 +64,13 @@ export default class HTableCell extends Vue {
         this.expanded = !this.expanded;
     }
 
-    private created() {
-        this.internalValue = this.value;
-    }
-
-    @Watch('value')
-    public valueChange() {
-        this.internalValue = this.value;
-        this.$forceUpdate();
-    }
-
     private disabled(control: Button) {
-        return isDisabled(this.internalValue, control);
+        return isDisabled(this.row[evaluate(this.row, control.value)], control);
     }
 
-    private val() {
-        return getValue(this.internalValue, this.definition);
-    }
-
-    private icon() {
-        return getIcon(this.internalValue, this.definition);
+    private eval(value: RowValue) {
+        console.log(evaluate(this.row, value));
+        return evaluate(this.row, value);
     }
 }
 </script>

@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop} from "vue-property-decorator";
+import {Vue, Component, Prop, Watch} from "vue-property-decorator";
 import HModal from '@/components/HModal.vue';
 import HForm from '@/components/HForm.vue';
 import HTable from '@/components/HTable.vue';
@@ -103,7 +103,7 @@ export default class HCrudView<R, D> extends Vue {
     }
 
     private edit(row: D) {
-        this.editing = row;
+        this.editing = {...row};
         this.errors = {};
     }
 
@@ -117,11 +117,18 @@ export default class HCrudView<R, D> extends Vue {
         const res = await this.service.get();
         if (res.success) this.data = res.result;
         else console.error(res.error);
+        console.log(this.data);
     }
 
     private async created() {
         this.table = this.tableDef;
         await this.refresh();
+    }
+
+    @Watch('$store.state.organization', {deep: true})
+    public orgChange() {
+        this.service.path.params.setParam('orgId', this.$store.state.organization.id);
+        this.refresh();
     }
 }
 </script>

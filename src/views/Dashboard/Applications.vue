@@ -34,17 +34,34 @@ export default class Applications extends Vue {
     private table: TableDefinition = {
         columns: [
             {
-                key: 'name',
                 label: 'Application Name',
-                type: ColumnType.Standard
+                type: ColumnType.RouterLink,
+                to: {
+                    key: 'id',
+                    fn: (id: string) => {
+                        return {
+                            name: 'Application',
+                            params: {
+                                appId: id,
+                            }
+                        }
+                    }
+                },
+                linkLabel: {
+                    key: 'name',
+                }
             },
             {
-                key: 'createdAt',
+                value: {
+                    key: 'createdAt',
+                },
                 label: 'Created At',
                 type: ColumnType.Date,
             },
             {
-                key: 'updatedAt',
+                value: {
+                    key: 'updatedAt',
+                },
                 label: 'Updated At',
                 type: ColumnType.Date,
             },

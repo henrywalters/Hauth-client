@@ -33,6 +33,37 @@ export default class Privileges extends Vue {
     private table: TableDefinition = {
         columns: [
             {
+                type: ColumnType.Icon,
+                label: 'Locked?',
+                value: {
+                    key: 'locked',
+                    fn: (val) => val ? 'lock' : 'lock-open',
+                }
+            },
+            {
+                type: ColumnType.Standard,
+                label: 'Privilege Name',
+                value: {
+                    key: 'name',
+                }
+            }, 
+            {
+                type: ColumnType.Date,
+                label: 'Created At',
+                value: {
+                    key: 'createdAt',
+                },
+            },
+            {
+                type: ColumnType.Date,
+                label: 'Updated At',
+                value: {
+                    key: 'updatedAt'
+                }
+            }
+        ],
+        /*columns: [
+            {
                 key: 'locked',
                 label: 'Locked?',
                 type: ColumnType.Icon,
@@ -54,6 +85,7 @@ export default class Privileges extends Vue {
                 type: ColumnType.Date,
             },
         ]
+        */
     }
 
     private form: FormDefinition = {

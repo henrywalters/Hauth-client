@@ -42,31 +42,42 @@ export default class Roles extends Vue {
     private table: TableDefinition = {
         columns: [
             {
-                key: 'locked',
+
                 label: 'Locked?',
                 type: ColumnType.Icon,
-                icon: (val) => val ? 'lock' : 'lock-open',
+                value: {
+                    key: 'locked',
+                    fn: (val) => val ? 'lock' : 'lock-open'
+                },
             },
             {
                 type: ColumnType.Standard,
                 label: 'Name',
-                key: 'name',
+                value: {
+                    key: 'name',
+                },
             },
             {
                 type: ColumnType.Date,
                 label: 'Created At',
-                key: 'createdAt',
+                value: {
+                    key: 'createdAt',
+                },
             },
             {
                 type: ColumnType.Date,
                 label: 'Last Update',
-                key: 'updatedAt',
+                value: {
+                    key: 'updatedAt',
+                },
             },
             {
                 type: ColumnType.Collapsible,
                 label: 'Privileges',
-                key: 'privileges',
-                fn: (val: Privilege[]) => val.map(p => p.name), 
+                value: {
+                    key: 'privileges',
+                    fn: (val: Privilege[]) => val.map(p => p.name), 
+                }
             },
         ]
     }

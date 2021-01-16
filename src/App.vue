@@ -9,6 +9,12 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
 import Navbar from '@/components/Navbar.vue';
 import { AuthService } from './services/auth.service';
+import Path from './services/path';
+
+export interface TestPath {
+  id: string;
+  appId: string;
+}
 
 @Component({
   components: {

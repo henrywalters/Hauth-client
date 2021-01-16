@@ -3,6 +3,6 @@ import BaseService, { HashMap } from "./base.service";
 
 export class RoleService extends BaseService<RoleRequest, Role, HashMap<string>> {
     constructor(orgId: string) {
-        super('RoleService', `organization/${orgId}/role`);
+        super('RoleService', `organization/:orgId/role`, {orgId});
     }
 }

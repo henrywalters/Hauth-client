@@ -55,6 +55,11 @@ const routes: Array<RouteConfig> = [
             name: 'Applications',
             path: 'applications',
             component: () => import(/*webpackChunkName: 'Applications' */ '../views/Dashboard/Applications.vue'),
+          },
+          {
+            name: 'Application',
+            path: 'applications/:appId',
+            component: () => import(/* webpackChunkName: 'Application' */ '../views/Dashboard/Application.vue'),
           }
         ]
       },

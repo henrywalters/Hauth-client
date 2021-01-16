@@ -1,3 +1,5 @@
+import { Application } from "./application.dto";
+
 export interface Organization {
     id: string;
     createdAt: string;
@@ -5,6 +7,7 @@ export interface Organization {
     name: string;
     domain: string;
     restrictUsersToDomain: boolean;
+    applications: Application[];
 }
 
 export interface OrganizationRequest {
