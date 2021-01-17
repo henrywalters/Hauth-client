@@ -60,6 +60,16 @@ const routes: Array<RouteConfig> = [
             name: 'Application',
             path: 'applications/:appId',
             component: () => import(/* webpackChunkName: 'Application' */ '../views/Dashboard/Application.vue'),
+          },
+          {
+            name: 'ApplicationPrivileges',
+            path: 'applications/:appId/privileges',
+            component: () => import(/* webpackChunkName: 'ApplicationPrivileges' */ '../views/Dashboard/ApplicationPrivileges.vue'),
+          },
+          {
+            name: 'ApplicationRoles',
+            path: 'applications/:appId/roles',
+            component: () => import(/* webpackChunkName: 'ApplicationRoles' */ '../views/Dashboard/ApplicationRoles.vue'),
           }
         ]
       },

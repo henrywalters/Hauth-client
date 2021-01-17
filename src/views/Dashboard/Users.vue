@@ -37,17 +37,23 @@ export default class Users extends Vue {
         columns: [
             {
                 label: 'Name',
-                key: 'name',
+                value: {
+                    key: 'name',
+                },
                 type: ColumnType.Standard,
             },
             {
                 label: 'Email',
-                key: 'email',
+                value: {
+                    key: 'email',
+                },
                 type: ColumnType.Standard,
             },
             {
                 label: 'Created At',
-                key: 'createdAt',
+                value: {
+                    key: 'createdAt',
+                },
                 type: ColumnType.Date,
             }
         ]
@@ -55,22 +61,13 @@ export default class Users extends Vue {
 
     private form: FormDefinition = {
         label: 'User',
+        hint: `Add a user by email address`,
         fields: [
-            {
-                type: FormFieldType.Text,
-                key: 'name',
-                label: 'Name',
-            },
             {
                 type: FormFieldType.Email,
                 key: 'email',
                 label: 'Email',
             },
-            {
-                type: FormFieldType.Password,
-                key: 'password',
-                label: 'Password',
-            }
         ]
     }
 

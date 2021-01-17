@@ -39,8 +39,17 @@ export default class ApplicationView extends Vue {
         }
     }
 
+    @Watch('$route.params.orgId')
+    public orgChange() {
+        console.log("Org change");
+        // Never will an app exist in another organization.
+        this.$router.push({name: 'Dashboard'});
+    }
+
+
     @Watch('$route.params.appId')
     public appChange() {
+        this.service.path.params.setParam('appId', this.$route.params.appId);
         this.loadApp();
     }
 }

@@ -16,7 +16,7 @@ export class OrganizationService extends BaseService<OrganizationRequest, Organi
         console.log(orgId);
         if (orgId) {
             return await this.getOne(orgId);
-        } 
+        }
         return {
             success: false,
             error: {},
