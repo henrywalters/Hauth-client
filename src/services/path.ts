@@ -1,4 +1,4 @@
-import PathParameters, { PathParameter, PathParameterMap } from "./pathParameters";
+import PathParameters, { isUndefined, PathParameter, PathParameterMap } from "./pathParameters";
 
 export interface VariablePathToken {
     var: string;
@@ -63,7 +63,6 @@ export default class Path {
             if (part.length === 0) {
                 continue;
             } else if (RegularPathTokenRegex.test(part)) {
-                console.log("Regular token");
                 tokens.push({token: part});
             } else if (OptionalVariablePathTokenRegex.test(part)) {
                 tokens.push({var: part.slice(1, part.length - 1), required: false});
@@ -73,7 +72,6 @@ export default class Path {
                 throw new Error("Invalid token for path: " + part);
             }
         }
-        console.log(tokens);
         return tokens;
     }
 
@@ -83,7 +81,15 @@ export default class Path {
             throw new Error("This path has invalid or missing parameters");
         }
 
-        return this.tokens.map(token => {
+        return this.tokens.filter(token => {
+            if (IsVariablePathToken(token) && !token.required) {
+                if (isUndefined(this.params.getParam(token.var))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }).map(token => {
             if (IsVariablePathToken(token)) {
                 return this.params.getParam(token.var);
             } else {

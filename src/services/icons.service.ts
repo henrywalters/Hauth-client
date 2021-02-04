@@ -66,6 +66,7 @@ function initializeLibrary() {
         faLockOpen,
         faPencilAlt,
         faCopy,
+        faCopy,
     )
 }
 

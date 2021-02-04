@@ -1,13 +1,13 @@
 import { Application } from "./application.dto";
 
 export interface Organization {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
+    id?: string;
+    createdAt?: string;
+    updatedAt?: string;
     name: string;
     domain: string;
     restrictUsersToDomain: boolean;
-    applications: Application[];
+    applications?: Application[];
 }
 
 export interface OrganizationRequest {

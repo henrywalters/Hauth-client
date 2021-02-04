@@ -14,6 +14,8 @@ export default class BaseService<T, R, E> extends Api {
 
     public name: string;
 
+    public data: R[] = [];
+
     constructor(name: string, controllerPath: string = "", pathParams: PathParameterMap = {}) {
         super(controllerPath, pathParams);
         this.name = name;

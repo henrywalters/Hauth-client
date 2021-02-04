@@ -1,16 +1,17 @@
+import { Privilege } from "./privilege.dto";
+import { Role } from "./role.dto";
+
 export interface User {
-    authType: string;
-    createdAt: string;
-    updatedAt: string;
     email: string;
-    id: string;
+    id?: string;
     name: string;
-    password: string;
-    thumbnailUrl: string;
+    thumbnailUrl?: string;
+    privileges?: Privilege[];
+    roles?: Role[];
+    applicationPrivileges?: Privilege[];
+    applicationRoles?: Role[];
 }
 
 export interface UserRequest {
-    name: string;
     email: string;
-    password: string;
 }

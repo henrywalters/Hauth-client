@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <notifications position='bottom right' />
     <navbar v-if='showNavbar' />
     <router-view v-if='initialized' />
   </div>
@@ -18,7 +19,7 @@ export interface TestPath {
 
 @Component({
   components: {
-    Navbar
+    Navbar,
   }
 })
 export default class App extends Vue {

@@ -13,8 +13,8 @@
             <div class='has-text-centered' v-else >
                 <h1 class='title has-text-centered'>New organization</h1>
             </div>
-
-            <h-form :fields='form' :data='data' :errors='errors' class='mt-3 mb-3' @submit='submit()' />
+            <h-form :fields='form' :data='orgManager.adding' :errors='orgManager.errors' class='mt-3 mb-3' @submit='submit()' />
+            <h-loader v-show='orgManager.isProcessingSave()' />
             
         </section>
     </div>
@@ -22,23 +22,24 @@
 
 <script lang="ts">
 import { FormFieldDefinition, FormFieldType } from '@/dtos/form.dto';
-import { OrganizationRequest } from '@/dtos/organization.dto';
+import { Organization, OrganizationRequest } from '@/dtos/organization.dto';
 import { OrganizationService } from '@/services/organization.service';
 import {Vue,Component} from 'vue-property-decorator'
 import HForm from '@/components/HForm.vue'
 import { HashMap } from '@/services/base.service';
+import EntityManager from '@/services/entityManager.service';
 
 @Component({
     components: {
         HForm,
     }
 })
-export default class Organization extends Vue {
+export default class CreateOrganization extends Vue {
 
     private data!: OrganizationRequest;
     private orgs!: OrganizationService;
 
-    private errors: HashMap<string> = {};
+    private orgManager!: EntityManager<OrganizationRequest, Organization>;
 
     private form: FormFieldDefinition[] = [
         {
@@ -76,30 +77,36 @@ export default class Organization extends Vue {
                 this.submit();
             }
         }
-    ]
-    
-    private reset() {
-        this.data = {
-            name: '',
-            domain: '',
-            restrictUsersToDomain: false,
-        }
-    }
+    ] 
 
     private created() {
         this.orgs = new OrganizationService();
-        this.reset();
+        this.orgManager = new EntityManager(this.orgs, (o: Organization) => {
+            return {
+                ...o,
+            }
+        }, () => {
+            return {
+                name: '',
+                domain: '',
+                restrictUsersToDomain: false,
+            }
+        })
+        this.orgManager.create();
     }
 
     private async submit() {
-        const res = await this.orgs.post(this.data);
-        if (res.success) {
-            this.$store.commit('setTutorialMode', true);
-            this.$store.dispatch('fetchOrganizations');
-            this.orgs.setDefaultOrganization(res.result);
-            this.$router.push({name: 'Organization', params: {orgId: res.result.id}});
-        } else {
-            this.errors = res.error;
+        if (!this.orgManager.isProcessingSave()) {
+            const org = await this.orgManager.save();
+            if (org) {
+                this.$store.commit('setTutorialMode', true);
+                this.$store.dispatch('fetchOrganizations');
+                this.orgs.setDefaultOrganization(org);
+                this.$router.push({name: 'Organization', params: {orgId: org.id as string}});
+            } else {
+                console.log(this.orgManager.errors);
+            }
+            this.$forceUpdate();
         }
     }
 

@@ -15,6 +15,7 @@ const routes: Array<RouteConfig> = [
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName: 'Login' */ '../views/Login.vue'),
+    props: true,
   },
   {
     path: '/register/:orgId?',
@@ -50,6 +51,20 @@ const routes: Array<RouteConfig> = [
             name: 'Users',
             path: 'users',
             component: () => import(/*webpackChunkName: 'Users' */ '../views/Dashboard/Users.vue'),
+            children: [
+              {
+                name: 'UserPrivileges',
+                path: 'privileges',
+              },
+              {
+                name: 'UserRoles',
+                path: 'roles',
+              },
+              {
+                name: 'UserApplications',
+                path: 'applications',
+              }
+            ]
           },
           {
             name: 'Applications',

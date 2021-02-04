@@ -8,20 +8,15 @@
         </span>
         <span v-else-if="definition.type === 'control'">
             <div class='buttons'>
-                <button 
+                <h-button 
                     class='button' v-for='(btn, i) in definition.controls' 
                     :key='i' 
                     :class="'is-' + btn.type" 
-                    @click='btn.onClick'
-                    :disabled='disabled(btn)'
-                >
-                    <span class='icon' v-if='btn.icon'>
-                        <icon :icon='btn.icon' />
-                    </span>
-                    <span v-if='btn.label'>
-                        {{btn.label}}
-                    </span>
-                </button>
+                    @click='btn.onClick($event, row)'
+                    :disabled='btn.disabled && eval(btn.disabled)'
+                    :icon='btn.icon'
+                    :label='btn.label'
+                />
             </div>
         </span>
         <span v-else-if="definition.type === 'router-link'">
@@ -47,7 +42,7 @@
 <script lang="ts">
 import {Vue, Component, Prop, Watch} from "vue-property-decorator";
 import {ColumnDefinition, RowValue, evaluate} from "@/dtos/table.dto";
-import { Button, isDisabled } from "@/dtos/button.dto";
+import { Button } from "@/dtos/button.dto";
 import { HashMap } from "@/services/base.service";
 
 @Component({})
@@ -64,12 +59,7 @@ export default class HTableCell extends Vue {
         this.expanded = !this.expanded;
     }
 
-    private disabled(control: Button) {
-        return isDisabled(this.row[evaluate(this.row, control.value)], control);
-    }
-
     private eval(value: RowValue) {
-        console.log(evaluate(this.row, value));
         return evaluate(this.row, value);
     }
 }

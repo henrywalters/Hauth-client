@@ -45,7 +45,7 @@ export default class PathParameters {
             return this.paramMap[varName].value;
         }
     }
-
+    
     public getParams(): PathParameterMap {
         const map: PathParameterMap = {};
         for (const param of this.params) {
@@ -56,9 +56,15 @@ export default class PathParameters {
         return map;
     }
 
-    public clearParams() {
-        for (const param of this.params) {
-            param.value = void 0;
+    public clearParam(varName: string) {
+        if (this.paramMap.hasOwnProperty(varName)) {
+            this.paramMap[varName].value = void 0;
+        }
+    }
+
+    public clearParams(varNames?: string[]) {
+        for (const varName of varNames ? varNames : this.params.map(p => p.varName)) {
+            this.clearParam(varName);
         }
     }
 

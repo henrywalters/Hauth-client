@@ -5,4 +5,15 @@ export class ApplicationService extends BaseService<ApplicationRequest, Applicat
     constructor(orgId: string) {
         super("ApplicationService", `organization/:orgId/application`, {orgId});
     }
+
+    public async getAppName(appId: string) {
+        try {
+            return (await this.http.get(this.controllerPath + '/' + appId + '/name')).data;
+        } catch (e) {
+            return {
+                success: false,
+                error: e.message,
+            }
+        }
+    }
 }

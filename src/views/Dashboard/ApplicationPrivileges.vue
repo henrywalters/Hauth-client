@@ -62,30 +62,6 @@ export default class Privileges extends Vue {
                 }
             }
         ],
-        /*columns: [
-            {
-                key: 'locked',
-                label: 'Locked?',
-                type: ColumnType.Icon,
-                icon: (val) => val ? 'lock' : 'lock-open',
-            },
-            {
-                key: 'name',
-                label: 'Privilege Name',
-                type: ColumnType.Standard
-            },
-            {
-                key: 'createdAt',
-                label: 'Created At',
-                type: ColumnType.Date,
-            },
-            {
-                key: 'updatedAt',
-                label: 'Updated At',
-                type: ColumnType.Date,
-            },
-        ]
-        */
     }
 
     private form: FormDefinition = {
